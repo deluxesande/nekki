@@ -1,0 +1,15 @@
+import { Container } from "@mui/material";
+import Body from "./Body";
+import Activities from "./Activities";
+
+const HomePage = () => {
+  // All components in this home folder will be imported here
+  return (
+    <Container sx={{ display: "flex", margin: "0 5rem", flexDirection: "row" }}>
+      <Body />
+      <Activities />
+    </Container>
+  );
+};
+
+export default HomePage;
