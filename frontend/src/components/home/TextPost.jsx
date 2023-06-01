@@ -1,4 +1,4 @@
-import { AddBox, Search } from "@mui/icons-material";
+import { AddBox } from "@mui/icons-material";
 import {
   Avatar,
   Box,
@@ -7,6 +7,7 @@ import {
   IconButton,
   TextField,
 } from "@mui/material";
+import UserAvatar from "../utils/UserAvatar";
 
 const TextPost = () => {
   return (
@@ -20,9 +21,7 @@ const TextPost = () => {
         backgroundColor: "#333",
       }}
     >
-      <IconButton>
-        <Avatar variant="circular" src="/profile.jpeg" />
-      </IconButton>
+      <UserAvatar image="/profile.jpeg" />
       <TextField
         variant="outlined"
         color="warning"

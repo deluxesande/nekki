@@ -9,6 +9,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
+import UserAvatar from "../utils/UserAvatar";
 
 const NavIcon = ({ icon, color, badgeContent }) => {
   return (
@@ -51,9 +52,9 @@ const AppTopBar = () => {
 
         {/* USER PROFILE */}
         <Tooltip title="Open settings" arrow>
-          <IconButton sx={{ marginLeft: "20px" }}>
-            <Avatar variant="circular" src="/profile.jpeg" />
-          </IconButton>
+          <Box sx={{ marginLeft: "20px" }}>
+            <UserAvatar image="/profile.jpeg " />
+          </Box>
         </Tooltip>
       </Toolbar>
     </AppBar>
