@@ -1,3 +1,19 @@
 body {
   background-color: #000 !important;
+  color: #fff !important;
+  overflow-x: hidden;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #f00;
+  border-radius: 6px;
 }

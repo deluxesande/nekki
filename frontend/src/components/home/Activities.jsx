@@ -1,5 +1,6 @@
 import { Box, Card, Container, Typography } from "@mui/material";
-import Activity from "./Activity";
+import FollowActivity from "../utils/FollowActivity";
+import Footer from "./Footer";
 
 const Activities = () => {
   return (
@@ -15,10 +16,11 @@ const Activities = () => {
         <Typography variant="h5" sx={{ color: "#fff", fontWeight: 600 }}>
           Activities
         </Typography>
-        <Activity />
-        <Activity />
-        <Activity />
-        <Activity />
+        <FollowActivity />
+        <FollowActivity />
+        <FollowActivity />
+        <FollowActivity />
+        <Footer />
       </Container>
     </Box>
   );

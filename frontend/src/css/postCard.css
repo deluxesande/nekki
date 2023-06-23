@@ -1,0 +1,18 @@
+.MuiCardHeader-root,
+.MuiCardActions-root {
+  box-shadow: 0px 2px 20px #222;
+}
+
+.MuiCardHeader-subheader,
+.MuiCardHeader-title,
+.MuiCardHeader-action .MuiSvgIcon-root {
+  color: #fff !important;
+}
+/* 
+.MuiCardHeader-title {
+  font-size: 17px !important;
+}
+
+.MuiCardHeader-subheader {
+  font-size: 11px !important;
+} */

@@ -1,15 +1,20 @@
 import { AddBox, Home, Message, Notifications } from "@mui/icons-material";
 import {
   AppBar,
-  Avatar,
   Badge,
   Box,
+  Button,
   IconButton,
+  Menu,
+  MenuItem,
+  Stack,
   Toolbar,
   Tooltip,
   Typography,
 } from "@mui/material";
 import UserAvatar from "../utils/UserAvatar";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const NavIcon = ({ icon, color, badgeContent }) => {
   return (
@@ -22,6 +27,18 @@ const NavIcon = ({ icon, color, badgeContent }) => {
 };
 
 const AppTopBar = () => {
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <AppBar position="static" className="header" color="primary">
       <Toolbar className="toolbar">
@@ -39,23 +56,48 @@ const AppTopBar = () => {
         </Typography>
 
         {/* ICONS */}
-        <Box sx={{ display: "flex", gap: 2 }}>
-          <NavIcon icon={<Home />} color={"success"} />
+        <Stack direction="row" spacing={2}>
+          <Link to="/">
+            <NavIcon icon={<Home />} color={"success"} />
+          </Link>
           <NavIcon icon={<AddBox />} />
-          <NavIcon icon={<Message />} badgeContent={3} color={"secondary"} />
+          <Link to="/messages">
+            <NavIcon icon={<Message />} badgeContent={3} color={"secondary"} />
+          </Link>
           <NavIcon
             icon={<Notifications />}
             badgeContent={100}
             color={"secondary"}
           />
-        </Box>
+        </Stack>
 
         {/* USER PROFILE */}
-        <Tooltip title="Open settings" arrow>
-          <Box sx={{ marginLeft: "20px" }}>
-            <UserAvatar image="/profile.jpeg " />
-          </Box>
-        </Tooltip>
+        <Box
+          sx={{ marginLeft: "15px" }}
+          id="user-profile-button"
+          onClick={handleClick}
+          aria-controls={open ? "user-profile-menu" : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? "true" : undefined}
+        >
+          <UserAvatar image="/profile.jpeg" />
+        </Box>
+
+        <Menu
+          id="user-profile-menu"
+          anchorEl={anchorEl}
+          open={open}
+          MenuListProps={{
+            "aria-labelledby": "user-profile-button",
+          }}
+          onClose={handleClose}
+        >
+          <Link to="/profile">
+            <MenuItem onClick={handleClose}>Profile</MenuItem>
+          </Link>
+          <MenuItem onClick={handleClose}>Settings</MenuItem>
+          <MenuItem onClick={handleClose}>Log out</MenuItem>
+        </Menu>
       </Toolbar>
     </AppBar>
   );

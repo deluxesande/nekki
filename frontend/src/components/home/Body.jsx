@@ -1,9 +1,13 @@
 import { Box, Container } from "@mui/material";
-import TextPost from "./TextPost";
+import TextPost from "../utils/TextPost";
+import PostCard from "../utils/PostCard";
+import { useEffect, useState } from "react";
 
-const Body = () => {
+import api_url from "../../App";
+
+const Body = ({ posts }) => {
   return (
-    <Box sx={{ width: "65%" }}>
+    <Box sx={{ width: "58%" }}>
       <Container
         sx={{
           marginTop: "20px",
@@ -14,6 +18,9 @@ const Body = () => {
       >
         {/* Div for creating text based posts */}
         <TextPost />
+        {posts.map((post) => (
+          <PostCard key={post.id} post={post} />
+        ))}
       </Container>
     </Box>
   );
