@@ -3,14 +3,13 @@ import {
   AppBar,
   Badge,
   Box,
-  Button,
   IconButton,
   Menu,
   MenuItem,
   Stack,
   Toolbar,
-  Tooltip,
   Typography,
+  useTheme,
 } from "@mui/material";
 import UserAvatar from "../utils/UserAvatar";
 import { useState } from "react";
@@ -39,8 +38,15 @@ const AppTopBar = () => {
     setAnchorEl(null);
   };
 
+  const theme = useTheme();
+
   return (
-    <AppBar position="static" className="header" color="primary">
+    <AppBar
+      position="fixed"
+      className="header"
+      color="primary"
+      sx={{ zIndex: theme.zIndex.drawer + 1 }} // Setting the appbars z index higher than the drawers
+    >
       <Toolbar className="toolbar">
         {/* LOGO */}
         <Typography

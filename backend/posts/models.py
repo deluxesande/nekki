@@ -14,10 +14,13 @@ class Comment(models.Model):
 
 
 class Post(models.Model):
-    post_account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    post_account = models.ForeignKey(
+        Account, on_delete=models.CASCADE, related_name="post_account"
+    )
     # post_image = models.ImageField(upload_to="posts/")
     post_caption = models.CharField(max_length=200)
-    post_likes = models.IntegerField(blank=False, default=0)
+    post_likes = models.ManyToManyField(Account, blank=True, related_name="post_likes")
+    when_posted = models.DateField(auto_now_add=True, null=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):

@@ -9,7 +9,6 @@ class Account(models.Model):
     account_name = models.CharField(
         max_length=USERNAME_lENGHT, unique=True, blank=False
     )
-    user_name = models.CharField(max_length=USERNAME_lENGHT, unique=True, blank=True)
     email = models.EmailField(unique=True, blank=False)
     # profile_pic = models.ImageField(upload_to="/profiles")
 

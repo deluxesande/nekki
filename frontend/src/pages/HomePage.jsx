@@ -1,6 +1,6 @@
 import { Container } from "@mui/material";
-import Body from "./Body";
-import Activities from "./Activities";
+import Body from "../components/home/Body";
+import Activities from "../components/home/Activities";
 
 const HomePage = ({ posts }) => {
   // All components in this home folder will be imported here
@@ -10,6 +10,7 @@ const HomePage = ({ posts }) => {
         display: "flex",
         margin: "0 auto",
         flexDirection: "row",
+        mt: "4rem",
       }}
     >
       <Body posts={posts} />

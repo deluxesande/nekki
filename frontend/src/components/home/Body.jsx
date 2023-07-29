@@ -1,9 +1,6 @@
 import { Box, Container } from "@mui/material";
 import TextPost from "../utils/TextPost";
 import PostCard from "../utils/PostCard";
-import { useEffect, useState } from "react";
-
-import api_url from "../../App";
 
 const Body = ({ posts }) => {
   return (
@@ -19,7 +16,11 @@ const Body = ({ posts }) => {
         {/* Div for creating text based posts */}
         <TextPost />
         {posts.map((post) => (
-          <PostCard key={post.id} post={post} />
+          <PostCard
+            key={post.id}
+            post={post}
+            post_likes={post.post_like_count}
+          />
         ))}
       </Container>
     </Box>

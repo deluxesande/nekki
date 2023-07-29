@@ -1,4 +1,6 @@
 import {
+  Avatar,
+  AvatarGroup,
   Box,
   Card,
   CardActions,
@@ -20,7 +22,7 @@ import { useState } from "react";
 
 import "../../css/postCard.css";
 
-const PostCard = ({ width, height, post }) => {
+const PostCard = ({ width, height, post, post_likes }) => {
   const [liked, setLiked] = useState(false);
   const [saved, setSaved] = useState(false);
 
@@ -45,7 +47,6 @@ const PostCard = ({ width, height, post }) => {
         sx={{ height: "60px" }}
         avatar={<UserAvatar image="/profile.jpeg" />}
         title={post.post_account}
-        subheader={post.created}
         color="inherit"
         action={
           <IconButton aria-label="settings">
@@ -54,27 +55,38 @@ const PostCard = ({ width, height, post }) => {
         }
       />
 
-      <CardContent>
-        <Typography>{post.post_caption}</Typography>
-      </CardContent>
-
       <CardMedia
         component="img"
-        height={height <= 600 ? height - 190 : 500}
+        height={height} // {height <= 600 ? height - 170 : 500}
         image="/post.jpg"
         alt="Paella dish"
       />
 
+      <CardContent>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "start",
+            gap: 1,
+          }}
+        >
+          <Typography variant="caption">{post.when_posted}</Typography>
+          <Typography variant="subtitle2">{post.post_caption}</Typography>
+          <Typography> 0 {post_likes} likes</Typography>
+        </Box>
+      </CardContent>
+
       <CardActions disableSpacing>
         <Box sx={{ flexGrow: 1 }}>
-          <IconButton aria-label="add to favorites" onClick={toggleLiked}>
+          <IconButton aria-label="add-to-favorites" onClick={toggleLiked}>
             {liked === true ? (
               <Favorite sx={{ color: "red" }} />
             ) : (
               <Favorite sx={{ color: "#fff" }} />
             )}
           </IconButton>
-          <IconButton aria-label="share">
+          <IconButton aria-label="comment">
             <CommentIcon sx={{ color: "#fff" }} />
           </IconButton>
           <IconButton aria-label="share">
@@ -82,7 +94,7 @@ const PostCard = ({ width, height, post }) => {
           </IconButton>
         </Box>
 
-        <IconButton aria-label="share" onClick={toggleSaved}>
+        <IconButton aria-label="save" onClick={toggleSaved}>
           {saved === true ? (
             <TurnedInIcon sx={{ color: "#fff" }} />
           ) : (

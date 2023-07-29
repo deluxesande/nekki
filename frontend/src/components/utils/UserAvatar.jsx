@@ -30,13 +30,15 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
   },
 }));
 
-const UserAvatar = ({ image }) => {
+const UserAvatar = ({ image, variant }) => {
   return (
     <IconButton>
       <StyledBadge
         overlap="circular"
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-        variant="dot"
+        // If the variant is suplied use that
+        // else the default of dot is used
+        variant={variant ? variant : "dot"}
       >
         <Avatar variant="circular" src={image} />
       </StyledBadge>
