@@ -1,6 +1,4 @@
 import {
-  Avatar,
-  AvatarGroup,
   Box,
   Card,
   CardActions,
@@ -21,6 +19,7 @@ import TurnedInIcon from "@mui/icons-material/TurnedIn";
 import { useState } from "react";
 
 import "../../css/postCard.css";
+import { api_url } from "../../App";
 
 const PostCard = ({ width, height, post, post_likes }) => {
   const [liked, setLiked] = useState(false);
@@ -34,6 +33,9 @@ const PostCard = ({ width, height, post, post_likes }) => {
     setSaved(!saved);
   };
 
+  const post_image = `${api_url}/${post.post_image}`;
+  const profile_pic = `${api_url}/${post.profile}`;
+
   return (
     <Card
       sx={{
@@ -45,7 +47,7 @@ const PostCard = ({ width, height, post, post_likes }) => {
     >
       <CardHeader
         sx={{ height: "60px" }}
-        avatar={<UserAvatar image="/profile.jpeg" />}
+        avatar={<UserAvatar image={profile_pic} />}
         title={post.post_account}
         color="inherit"
         action={
@@ -58,8 +60,8 @@ const PostCard = ({ width, height, post, post_likes }) => {
       <CardMedia
         component="img"
         height={height} // {height <= 600 ? height - 170 : 500}
-        image="/post.jpg"
-        alt="Paella dish"
+        image={post_image}
+        alt={post.post_caption}
       />
 
       <CardContent>
@@ -73,7 +75,7 @@ const PostCard = ({ width, height, post, post_likes }) => {
         >
           <Typography variant="caption">{post.when_posted}</Typography>
           <Typography variant="subtitle2">{post.post_caption}</Typography>
-          <Typography> 0 {post_likes} likes</Typography>
+          <Typography>{post.likes} likes</Typography>
         </Box>
       </CardContent>
 

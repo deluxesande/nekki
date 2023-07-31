@@ -10,7 +10,7 @@ class CommentAdmin(admin.ModelAdmin):
 
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ["post_account", "post_caption"]
+    list_display = ["post_account", "id", "post_caption"]
     list_filter = ["post_caption"]
     search_fields = ["post_caption"]
 

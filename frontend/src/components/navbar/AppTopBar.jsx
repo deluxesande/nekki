@@ -12,8 +12,9 @@ import {
   useTheme,
 } from "@mui/material";
 import UserAvatar from "../utils/UserAvatar";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
+import AuthContext from "../../context/AuthContext";
 
 const NavIcon = ({ icon, color, badgeContent }) => {
   return (
@@ -39,6 +40,8 @@ const AppTopBar = () => {
   };
 
   const theme = useTheme();
+
+  let { user, logoutUser } = useContext(AuthContext);
 
   return (
     <AppBar
@@ -79,7 +82,12 @@ const AppTopBar = () => {
 
         {/* USER PROFILE */}
         <Box
-          sx={{ marginLeft: "15px" }}
+          sx={{
+            marginLeft: "15px",
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+          }}
           id="user-profile-button"
           onClick={handleClick}
           aria-controls={open ? "user-profile-menu" : undefined}
@@ -87,6 +95,7 @@ const AppTopBar = () => {
           aria-expanded={open ? "true" : undefined}
         >
           <UserAvatar image="/profile.jpeg" />
+          {user && <Typography>{user.username}</Typography>}
         </Box>
 
         <Menu
@@ -102,7 +111,20 @@ const AppTopBar = () => {
             <MenuItem onClick={handleClose}>Profile</MenuItem>
           </Link>
           <MenuItem onClick={handleClose}>Settings</MenuItem>
-          <MenuItem onClick={handleClose}>Log out</MenuItem>
+          {user ? (
+            <MenuItem
+              onClick={() => {
+                handleClose();
+                logoutUser();
+              }}
+            >
+              Log out
+            </MenuItem>
+          ) : (
+            <Link to="/login">
+              <MenuItem onClick={handleClose}>Log In</MenuItem>
+            </Link>
+          )}
         </Menu>
       </Toolbar>
     </AppBar>

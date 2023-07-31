@@ -10,7 +10,14 @@ class Account(models.Model):
         max_length=USERNAME_lENGHT, unique=True, blank=False
     )
     email = models.EmailField(unique=True, blank=False)
-    # profile_pic = models.ImageField(upload_to="/profiles")
+    profile_pic = models.ImageField(
+        default="profile.jpeg/",
+        upload_to="profiles/",
+        verbose_name="profile",
+    )
+
+    def get_profile_pic(self):
+        return self.profile_pic.url
 
     def __str__(self):
         return str(self.user)

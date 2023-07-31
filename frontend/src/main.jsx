@@ -16,10 +16,10 @@ import { BrowserRouter } from "react-router-dom";
 const theme = createTheme({
   pallete: {
     primary: {
-      main: blue[700],
+      main: blue[400],
     },
     secondary: {
-      main: orange[700],
+      main: orange[400],
     },
   },
 });

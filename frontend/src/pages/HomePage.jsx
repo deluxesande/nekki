@@ -2,7 +2,7 @@ import { Container } from "@mui/material";
 import Body from "../components/home/Body";
 import Activities from "../components/home/Activities";
 
-const HomePage = ({ posts }) => {
+const HomePage = () => {
   // All components in this home folder will be imported here
   return (
     <Container
@@ -13,7 +13,7 @@ const HomePage = ({ posts }) => {
         mt: "4rem",
       }}
     >
-      <Body posts={posts} />
+      <Body />
       <Activities />
     </Container>
   );
