@@ -95,16 +95,20 @@ class ViewPost(APIView):
 
 
 class LikePost(APIView):
-    def put(self, request, pk):
+    def get(self, request, pk):
+        user = request.user.account
         post_liked = Post.objects.get(id=pk)
-        post_liked.post_likes.add(request.user.account)
+        post_liked.post_likes.add(user)
         post_liked.save()
 
-        return Response({"Message": "Post liked."}, status=status.HTTP_202_ACCEPTED)
+        return Response(
+            {"Message": f"Post {post_liked} liked."},
+            status=status.HTTP_202_ACCEPTED,
+        )
 
 
 class UnlikePost(APIView):
-    def put(self, request, pk):
+    def get(self, request, pk):
         post_to_unliked = Post.objects.get(id=pk)
         post_to_unliked.post_likes.remove(request.user.account)
         post_to_unliked.save()

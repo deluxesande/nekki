@@ -4,24 +4,17 @@ import PostCard from "../utils/PostCard";
 import { useContext, useEffect, useState } from "react";
 import { api_url } from "../../App";
 import AuthContext from "../../context/AuthContext";
+import useFetch from "../utils/useFetch";
 
 const Body = () => {
-  const { logoutUser, authTokens } = useContext(AuthContext);
+  const { logoutUser, fetching, setFetching } = useContext(AuthContext);
 
   const [posts, setPosts] = useState([]);
-  const [fetching, setFetching] = useState(false);
+  const api = useFetch();
 
   const fetchPosts = async () => {
     // console.log("Fetching...");
-    const response = await fetch(`${api_url}/post/`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + String(authTokens.access),
-      },
-    });
-    const data = await response.json();
-    setFetching(true);
+    const { response, data } = await api("/post/", "GET");
 
     if (response.status === 200) {
       setPosts(data);

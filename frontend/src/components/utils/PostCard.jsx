@@ -16,25 +16,42 @@ import CommentIcon from "@mui/icons-material/Comment";
 import TurnedInNotIcon from "@mui/icons-material/TurnedInNot";
 import TurnedInIcon from "@mui/icons-material/TurnedIn";
 
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 import "../../css/postCard.css";
 import { api_url } from "../../App";
+import useFetch from "./useFetch";
+import AuthContext from "../../context/AuthContext";
 
-const PostCard = ({ width, height, post, post_likes }) => {
+const PostCard = ({ width, height, post }) => {
+  const api = useFetch();
   const [liked, setLiked] = useState(false);
   const [saved, setSaved] = useState(false);
 
+  const { setFetching } = useContext(AuthContext);
+
+  const like_post = async () => {
+    // Call the like view from the api
+    const { response, data } = await api(`/post/like/${post.id}/`, "GET");
+    if (response.status === 202) {
+      console.info(`POST: ${post.post_caption} liked!`, data);
+    } else if (response.status === 304) {
+      console.info(`POST: ${post.post_caption} already liked!`, data);
+    }
+    setFetching(true);
+  };
+
   const toggleLiked = () => {
     setLiked(!liked);
+    like_post();
   };
 
   const toggleSaved = () => {
     setSaved(!saved);
   };
 
-  const post_image = `${api_url}/${post.post_image}`;
-  const profile_pic = `${api_url}/${post.profile}`;
+  const post_image = `${api_url}${post.post_image}`;
+  const profile_pic = `${api_url}${post.profile}`;
 
   return (
     <Card

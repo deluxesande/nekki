@@ -3,34 +3,31 @@ import { Box, Container, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { api_url } from "../../App";
 import AuthContext from "../../context/AuthContext";
+import useFetch from "../utils/useFetch";
 
 const PostContainer = () => {
-  const { logoutUser, authTokens } = useContext(AuthContext);
+  const api = useFetch();
+
+  const { logoutUser, fetching, setFetching } = useContext(AuthContext);
 
   const [posts, setPosts] = useState([]);
 
   const fetchPosts = async () => {
     // console.log("Fetching...");
-    const response = await fetch(`${api_url}/post/get-posts/`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + String(authTokens.access),
-      },
-    });
-
-    const data = await response.json();
+    const { response, data } = await api("/post/get-posts/", "GET");
 
     if (response.status === 200) {
       setPosts(data);
     } else if (response.statusText === "Unauthorized") {
       logoutUser();
     }
+    setFetching(true);
   };
 
   useEffect(() => {
     fetchPosts();
-  }, []);
+    setFetching(false);
+  }, [fetching]);
 
   return (
     <Box className="post-container">
@@ -40,16 +37,17 @@ const PostContainer = () => {
       >
         Posts
       </Typography>
-      <Container sx={{ columnCount: 2, gap: 2 }}>
-        {/* FIGURE OUT HOW TO DISPLAY POSTS IN GRID */}
-        {/* <PostCard width={600} height={550} />
-        <PostCard width={600} height={550} /> */}
+      <Container
+        sx={{
+          // display: "flex",
+          // flexDirection: { xs: "column", md: "row" },
+          // flexWrap: "wrap",
+          columnCount: { xs: 1, md: 2 },
+          gap: 2,
+        }}
+      >
         {posts.map((post, index) => (
-          <PostCard
-            key={index}
-            post={post}
-            post_likes={post.post_likes_count}
-          />
+          <PostCard key={index} post={post} />
         ))}
       </Container>
     </Box>

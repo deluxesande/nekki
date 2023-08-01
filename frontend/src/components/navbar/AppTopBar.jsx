@@ -61,7 +61,7 @@ const AppTopBar = () => {
             cursor: "pointer",
           }}
         >
-          Nekki
+          <Link to="/">Nekki</Link>
         </Typography>
 
         {/* ICONS */}

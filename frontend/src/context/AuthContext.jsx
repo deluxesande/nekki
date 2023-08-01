@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { api_url } from "../App";
 
-// import jwt_decode from "jwt-decode";
+import jwt_decode from "jwt-decode";
 
 const AuthContext = createContext();
 
@@ -12,23 +12,14 @@ export const AuthProvider = ({ children }) => {
     ? JSON.parse(localStorage.getItem("authTokens"))
     : null;
 
-  const acessState = localStorage.getItem("accessToken")
-    ? localStorage.getItem("accessToken")
-    : null;
-
-  const refreshState = localStorage.getItem("refeshToken")
-    ? localStorage.getItem("refeshToken")
-    : null;
-
   const userState = localStorage.getItem("authTokens")
     ? JSON.parse(localStorage.getItem("authTokens")) // jwt_decode(localStorage.getItem("authTokens"))
     : null;
 
   const [user, setUser] = useState(() => userState);
   const [authTokens, setAuthTokens] = useState(() => authState);
-  const [accessToken, setAccesToken] = useState(() => acessState);
-  const [refreshToken, setRefreshToken] = useState(() => refreshState);
   const [loading, setLoading] = useState(true);
+  const [fetching, setFetching] = useState(false);
 
   // Login user and set the tokens in local storage
   const loginUSer = async (e) => {
@@ -49,12 +40,9 @@ export const AuthProvider = ({ children }) => {
 
     if (response.status === 200) {
       setAuthTokens(data);
-      setAccesToken(data.access);
-      setRefreshToken(data.refresh);
       setUser(data.access);
-      // setUser(jwt_decode(data.access));
+      setUser(jwt_decode(data.access));
       localStorage.setItem("authTokens", JSON.stringify(data));
-      localStorage.setItem("accessToken", data.access);
       localStorage.setItem("refreshToken", data.refresh);
     } else {
       alert("Error getting tokens.");
@@ -66,10 +54,7 @@ export const AuthProvider = ({ children }) => {
     console.log("Log out called");
 
     setAuthTokens(null);
-    setRefreshToken(null);
-    setAccesToken(null);
     setUser(null);
-    localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("authTokens");
   };
@@ -95,9 +80,7 @@ export const AuthProvider = ({ children }) => {
     if (response.status === 200) {
       setAuthTokens(data);
       setUser(data.access);
-      // setUser(jwt_decode(data.access));
-      localStorage.setItem("accessToken", data.access);
-      console.log("Updated");
+      setUser(jwt_decode(data.access));
     } else if (response.statusText === "Unauthorized") {
       logoutUser();
     }
@@ -111,11 +94,17 @@ export const AuthProvider = ({ children }) => {
   const contextData = {
     user: user,
     authTokens: authTokens,
+    refreshToken: localStorage.getItem("refreshToken"),
+    fetching: fetching,
+    setFetching: setFetching,
+    setAuthTokens: setAuthTokens,
+    setUser: setUser,
     loginUSer: loginUSer,
     logoutUser: logoutUser,
   };
 
   // Update the tokens
+  const four_minutes = 1000 * 60 * 4;
   useEffect(() => {
     if (loading) {
       updateToken();
@@ -125,7 +114,7 @@ export const AuthProvider = ({ children }) => {
       if (authTokens) {
         updateToken();
       }
-    }, 1000 * 60 * 4);
+    }, four_minutes);
 
     return () => clearInterval(interval);
   }, [authTokens, loading]);
