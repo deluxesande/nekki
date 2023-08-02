@@ -3,7 +3,7 @@ import { useContext } from "react";
 import AuthContext from "../context/AuthContext";
 
 import "../css/login.css";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 const LoginPage = () => {
   const { loginUSer, authTokens } = useContext(AuthContext);
@@ -38,6 +38,7 @@ const LoginPage = () => {
             <Button variant="contained" type="submit">
               Log In
             </Button>
+            <Link to="/register">Register</Link>
           </form>
         </Box>
       )}

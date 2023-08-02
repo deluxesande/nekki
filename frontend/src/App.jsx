@@ -8,6 +8,7 @@ import { Route, Routes } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import PrivateRoutes from "./components/utils/PrivateRoutes";
 import { AuthProvider } from "./context/AuthContext";
+import RegisterPage from "./pages/RegisterPage";
 
 export const api_url = "http://127.0.0.1:8000";
 
@@ -17,8 +18,8 @@ function App() {
       <AuthProvider>
         <AppTopBar />
         <Routes>
-          {/* Fix private route */}
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
           <Route element={<PrivateRoutes />}>
             <Route path="/" element={<HomePage />} exact />
             <Route path="/messages" element={<MessagePage />} />

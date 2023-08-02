@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from django.forms import ValidationError
 
 from .models import Post, Comment
 
@@ -15,11 +14,12 @@ class PostSerializer(serializers.ModelSerializer):
             "post_caption",
             "post_account",
             "post_image",
+            "post_likes",
             "profile",
             "when_posted",
             "likes",
         ]
-        read_only_fields = ["id", "post_account", "when_posted"]
+        read_only_fields = ["id", "post_account", "post_likes", "when_posted"]
 
     def get_likes(self, obj):
         # Check that an instance of post is being passed here

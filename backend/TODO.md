@@ -6,12 +6,15 @@ Project Description
 
 ### Todo
 
+- [ ] create messages API  
+- [ ] Allow user to delete posts  
 - [ ] Implent following  
-- [ ] Implement liking functionality  
 
 ### In Progress
 
+- [ ] Create messages model  
 
 ### Done ✓
 
+- [x] Implement liking functionality  
 

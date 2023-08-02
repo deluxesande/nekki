@@ -1,4 +1,5 @@
 import jwt_decode from "jwt-decode";
+import dayjs from "dayjs";
 import { useContext } from "react";
 import AuthContext from "../../context/AuthContext";
 import { api_url } from "../../App";
@@ -32,9 +33,10 @@ const useFetch = () => {
     const data = await response.json();
 
     if (response.status === 200) {
-      localStorage.setItem("authTokens", JSON.stringify(data));
+      console.log("New tokens set");
       setAuthTokens(data);
       setUser(jwt_decode(data.access));
+      localStorage.setItem("authTokens", JSON.stringify(data));
     } else {
       alert("Error getting tokens.");
     }
@@ -45,13 +47,16 @@ const useFetch = () => {
   const callFetch = async (url, method) => {
     // console.log("Call Fetch");
     const user = jwt_decode(authTokens.access);
-    const isExpired = dayjs.unix(user.exp).diff(dayjs()) < 1;
+    const isExpired = dayjs.unix(user.exp).diff(dayjs()) <= 1;
 
-    if (isExpired) setAuthTokens(await refreshAccessToken());
+    if (isExpired) await refreshAccessToken();
 
+    // Using authtokens from storage because state authTokens take time to update
     config["method"] = method;
     config["headers"] = {
-      Authorization: `Bearer ${authTokens?.access}`,
+      Authorization: `Bearer ${
+        JSON.parse(localStorage.getItem("authTokens")).access
+      }`,
     };
 
     const { response, data } = await originalRequest(url, config);

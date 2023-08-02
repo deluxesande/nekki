@@ -1,8 +1,9 @@
 from rest_framework.response import Response
-from rest_framework import status, authentication
+from rest_framework import status
 
 from rest_framework.views import APIView
-from rest_framework import permissions
+
+
 
 # POSTS APP
 from .models import Post
@@ -58,7 +59,7 @@ class ViewPost(APIView):
     def get(self, request):
         try:
             account = request.user.account
-            posts = Post.objects.filter(post_account=account)
+            posts = Post.objects.filter(post_account=account).order_by("created")
             serializer = PostSerializer(posts, many=True)
 
             for post in serializer.data:
@@ -95,7 +96,7 @@ class ViewPost(APIView):
 
 
 class LikePost(APIView):
-    def get(self, request, pk):
+    def put(self, request, pk):
         user = request.user.account
         post_liked = Post.objects.get(id=pk)
         post_liked.post_likes.add(user)
@@ -108,9 +109,11 @@ class LikePost(APIView):
 
 
 class UnlikePost(APIView):
-    def get(self, request, pk):
+    def put(self, request, pk):
         post_to_unliked = Post.objects.get(id=pk)
         post_to_unliked.post_likes.remove(request.user.account)
         post_to_unliked.save()
 
         return Response({"Message": "Post unliked."}, status=status.HTTP_202_ACCEPTED)
+
+

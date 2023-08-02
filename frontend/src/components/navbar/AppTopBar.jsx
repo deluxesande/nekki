@@ -15,6 +15,7 @@ import UserAvatar from "../utils/UserAvatar";
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import AuthContext from "../../context/AuthContext";
+import useFetch from "../utils/useFetch";
 
 const NavIcon = ({ icon, color, badgeContent }) => {
   return (
@@ -28,6 +29,7 @@ const NavIcon = ({ icon, color, badgeContent }) => {
 
 const AppTopBar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
+  const api = useFetch();
 
   const open = Boolean(anchorEl);
 

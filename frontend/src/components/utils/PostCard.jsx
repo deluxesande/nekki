@@ -28,21 +28,33 @@ const PostCard = ({ width, height, post }) => {
   const [liked, setLiked] = useState(false);
   const [saved, setSaved] = useState(false);
 
-  const { setFetching } = useContext(AuthContext);
+  const { user, setFetching } = useContext(AuthContext);
 
   const like_post = async () => {
     // Call the like view from the api
-    const { response, data } = await api(`/post/like/${post.id}/`, "GET");
-    if (response.status === 202) {
-      console.info(`POST: ${post.post_caption} liked!`, data);
-    } else if (response.status === 304) {
-      console.info(`POST: ${post.post_caption} already liked!`, data);
+    let unlike = false;
+    post.post_likes.map((like) => {
+      if (like === user.account_id) unlike = true;
+    });
+
+    if (unlike) {
+      const { response, data } = await api(`/post/unlike/${post.id}/`, "PUT");
+      if (response.status === 202) {
+        setLiked(false);
+        console.log("Unliked");
+      }
+    } else {
+      const { response, data } = await api(`/post/like/${post.id}/`, "PUT");
+      if (response.status === 202) {
+        setLiked(true);
+        console.log("Liked");
+      }
     }
+
     setFetching(true);
   };
 
   const toggleLiked = () => {
-    setLiked(!liked);
     like_post();
   };
 

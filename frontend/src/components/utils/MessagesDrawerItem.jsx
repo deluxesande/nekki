@@ -7,9 +7,9 @@ const MessagesDrawerItem = ({ user }) => {
     <ListItemButton
       sx={{
         paddingTop: "20px",
-        width: 250,
-        marginRight: "10px",
+        width: 270,
         "&:hover": { backgroundColor: "#ccc" },
+        "&:focus": { backgroundColor: "#444", color: "#ccc" },
       }}
     >
       {/* Add logic to check if user is online */}
@@ -18,7 +18,20 @@ const MessagesDrawerItem = ({ user }) => {
         <Typography>{user.name}</Typography>
         <Typography variant="caption">{user.text}</Typography>
       </Stack>
-      <Badge badgeContent={user.messages} variant="dot" color="primary" />
+      <Stack
+        sx={{
+          display: "flex",
+          flexFlow: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 1,
+        }}
+      >
+        <Badge badgeContent={user.messages} variant="dot" color="success" />
+        <Typography variant="caption" sx={{ color: "green" }}>
+          12:35
+        </Typography>
+      </Stack>
     </ListItemButton>
   );
 };

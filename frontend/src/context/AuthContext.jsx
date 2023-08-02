@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import { api_url } from "../App";
 
 import jwt_decode from "jwt-decode";
+import { Box, CircularProgress } from "@mui/material";
 
 const AuthContext = createContext();
 
@@ -24,7 +25,7 @@ export const AuthProvider = ({ children }) => {
   // Login user and set the tokens in local storage
   const loginUSer = async (e) => {
     e.preventDefault();
-    console.log("Log in called");
+    // console.log("Log in called");
     const response = await fetch(`${api_url}/auth/token/`, {
       method: "POST",
       headers: {
@@ -40,7 +41,6 @@ export const AuthProvider = ({ children }) => {
 
     if (response.status === 200) {
       setAuthTokens(data);
-      setUser(data.access);
       setUser(jwt_decode(data.access));
       localStorage.setItem("authTokens", JSON.stringify(data));
       localStorage.setItem("refreshToken", data.refresh);
@@ -50,44 +50,25 @@ export const AuthProvider = ({ children }) => {
   };
 
   // Delete tokens from local storage
+  const logout_from_the_backend = async () => {
+    const access_config = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authTokens?.access}`,
+      },
+    };
+    const response = await fetch(`${api_url}/auth/logout/`, access_config);
+    console.log(response);
+  };
   const logoutUser = () => {
-    console.log("Log out called");
+    // console.log("Log out called");
 
     setAuthTokens(null);
     setUser(null);
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("authTokens");
-  };
-
-  // Update tokens in local storage
-  const updateToken = async () => {
-    console.log("Update token called");
-
-    const response = await fetch(`${api_url}/auth/token/refresh/`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        refresh: localStorage.getItem("refreshToken")
-          ? localStorage.getItem("refreshToken")
-          : null,
-      }),
-    });
-
-    const data = await response.json();
-
-    if (response.status === 200) {
-      setAuthTokens(data);
-      setUser(data.access);
-      setUser(jwt_decode(data.access));
-    } else if (response.statusText === "Unauthorized") {
-      logoutUser();
-    }
-
-    if (loading) {
-      setLoading(false);
-    }
+    logout_from_the_backend();
   };
 
   // Setting the values to used in the app
@@ -103,25 +84,29 @@ export const AuthProvider = ({ children }) => {
     logoutUser: logoutUser,
   };
 
-  // Update the tokens
-  const four_minutes = 1000 * 60 * 4;
   useEffect(() => {
-    if (loading) {
-      updateToken();
-    }
+    if (authTokens) setUser(jwt_decode(authTokens.access));
 
-    let interval = setInterval(() => {
-      if (authTokens) {
-        updateToken();
-      }
-    }, four_minutes);
-
-    return () => clearInterval(interval);
+    setTimeout(() => setLoading(false), 2000);
   }, [authTokens, loading]);
 
   return (
     <AuthContext.Provider value={contextData}>
-      {loading ? null : children}
+      {loading ? (
+        <Box
+          sx={{
+            display: "flex",
+            minHeight: "100vh",
+            alignItems: "center",
+            justifyContent: "center",
+            textAlign: "center",
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      ) : (
+        children
+      )}
     </AuthContext.Provider>
   );
 };

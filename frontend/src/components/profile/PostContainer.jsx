@@ -21,7 +21,6 @@ const PostContainer = () => {
     } else if (response.statusText === "Unauthorized") {
       logoutUser();
     }
-    setFetching(true);
   };
 
   useEffect(() => {
@@ -39,10 +38,9 @@ const PostContainer = () => {
       </Typography>
       <Container
         sx={{
-          // display: "flex",
-          // flexDirection: { xs: "column", md: "row" },
-          // flexWrap: "wrap",
-          columnCount: { xs: 1, md: 2 },
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, min(500px, 500px))",
+          // columnCount: { xs: 1, md: 2 },
           gap: 2,
         }}
       >

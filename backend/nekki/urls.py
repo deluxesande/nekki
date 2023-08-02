@@ -11,4 +11,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("post/", include("posts.urls")),
     path("auth/", include("authenticate.urls")),
+    path("chat/", include("messages_api.urls")),
 ]
