@@ -1,8 +1,6 @@
 from rest_framework.response import Response
 from rest_framework import status
-
 from rest_framework.views import APIView
-
 
 
 # POSTS APP
@@ -115,5 +113,3 @@ class UnlikePost(APIView):
         post_to_unliked.save()
 
         return Response({"Message": "Post unliked."}, status=status.HTTP_202_ACCEPTED)
-
-

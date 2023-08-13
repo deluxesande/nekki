@@ -12,9 +12,9 @@ Project Description
 
 ### In Progress
 
-- [ ] Create messages model  
 
 ### Done ✓
 
+- [x] Create messages model  
 - [x] Implement liking functionality  
 

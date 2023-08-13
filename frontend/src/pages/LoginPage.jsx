@@ -16,24 +16,27 @@ const LoginPage = () => {
         <Box sx={{ mt: "4rem" }}>
           <form onSubmit={loginUSer}>
             <TextField
-              variant="filled"
-              label="Username"
+              variant="outlined"
+              label="Enter Username"
+              margin="dense"
+              autoFocus
+              fullWidth
+              required
               type="text"
-              size="small"
-              color="secondary"
               placeholder="Enter Username"
               name="username"
-              sx={{ backgroundColor: "#555", borderRadius: "3px" }}
+              sx={{ backgroundColor: "#333", borderRadius: "3px" }}
             />
             <TextField
-              variant="filled"
-              label="Password"
+              variant="outlined"
+              label="Enter Password"
+              margin="dense"
+              // autoFocus
+              required
               type="password"
-              size="small"
-              color="secondary"
               placeholder="Enter Password"
               name="password"
-              sx={{ backgroundColor: "#555", borderRadius: "3px" }}
+              sx={{ backgroundColor: "#333", borderRadius: "3px" }}
             />
             <Button variant="contained" type="submit">
               Log In

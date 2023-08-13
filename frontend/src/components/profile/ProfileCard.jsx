@@ -1,6 +1,16 @@
 import { Avatar, AvatarGroup, Button, Box, Typography } from "@mui/material";
+import { useContext } from "react";
+import AuthContext from "../../context/AuthContext";
+import { api_url } from "../../App";
 
 const ProfileCard = () => {
+  const { user } = useContext(AuthContext);
+
+  let profile_pic = "";
+
+  if (user !== null) {
+    profile_pic = `${api_url}${user.profile_pic}`;
+  }
   return (
     <Box className="profile-card">
       <Box className="user-details">
@@ -14,7 +24,7 @@ const ProfileCard = () => {
             gap: 8,
           }}
         >
-          <Avatar className="profile-image" src="/profile.jpeg" />
+          <Avatar className="profile-image" src={profile_pic} />
           <Button
             color="primary"
             variant="contained"
@@ -23,7 +33,9 @@ const ProfileCard = () => {
             Edit Profile
           </Button>
         </Box>
-        <Typography color={"secondary"}>johndoe</Typography>
+        <Typography variant="h4" color={"primary"}>
+          {user.username}
+        </Typography>
         <Typography sx={{ width: 500, marginTop: "10px" }}>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum
           necessitatibus iste quas earum expedita? Consequatur nemo veniam
@@ -50,9 +62,7 @@ const ProfileCard = () => {
             <Typography color={"primary"}>1234</Typography>
           </Box>
           <Box>
-            <Typography variant="button">
-              Following
-            </Typography>
+            <Typography variant="button">Following</Typography>
             <Typography color={"primary"}>500</Typography>
           </Box>
         </Box>

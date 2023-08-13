@@ -2,17 +2,30 @@ import { Stack, Typography } from "@mui/material";
 import "../css/smallAvatar.css";
 import MessagesDrawer from "../components/messages/MessagesDrawer";
 import MessagesTab from "../components/messages/MessagesTab";
+import { useState } from "react";
 
 const MessagePage = () => {
-  const users = [
-    { name: "john doe", text: "hi", messages: 2 },
-    { name: "jane doe", text: "Hello", messages: 4 },
-    { name: "smith tom", text: "How are you", messages: 1 },
-  ];
+  const [socketConnection, setSocketConnection] = useState(false);
+  const [chatId, setChatId] = useState(0);
+  const [receiver, setReceiver] = useState("");
+  const [fetching, setFetching] = useState(false);
+
   return (
     <Stack direction="row">
-      <MessagesDrawer users={users} />
-      <MessagesTab />
+      <MessagesDrawer
+        setFetching={setFetching}
+        setSocketConnection={setSocketConnection}
+        setChatId={setChatId}
+        setReceiver={setReceiver}
+        socketConnection={socketConnection}
+        fetching={fetching}
+      />
+      <MessagesTab
+        socketConnection={socketConnection}
+        setFetching={setFetching}
+        chatId={chatId}
+        receiver={receiver}
+      />
     </Stack>
   );
 };

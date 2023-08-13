@@ -2,8 +2,6 @@
   position: relative;
   width: 100%;
   height: calc(100% - 45px);
-  /* To accomodate space for the scroll bar */
-  /* padding: 0 15px; */
   overflow-y: auto;
 }
 
@@ -19,9 +17,21 @@
   right: 0;
   text-align: right;
   max-width: 65%;
-  padding: 12px 20px;
-  background-color: coral;
+  min-width: 8%;
+  padding: 18px;
+  padding-top: 8px;
+  background-color: darkslategray;
   border-radius: 10px 10px 0 10px;
+  padding-bottom: 20px;
+}
+
+.message .text span {
+  font-size: 10px;
+  position: absolute;
+  bottom: 5px;
+  left: 20px;
+  color: #f4f4f4;
+  /* color: #333; */
 }
 
 .outgoing-message {

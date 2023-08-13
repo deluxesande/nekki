@@ -8,74 +8,112 @@ import {
 import SendIcon from "@mui/icons-material/Send";
 
 import "../../css/MessagesTab.css";
+import { useContext, useEffect, useState } from "react";
+import AuthContext from "../../context/AuthContext";
+import websocketinstance from "../utils/Websocket";
 
-const MessagesTab = () => {
+const MessagesTab = ({ socketConnection, setFetching, chatId, receiver }) => {
+  const [messages, setMessages] = useState([]);
+  const { user } = useContext(AuthContext);
+
+  const send_data_to_server = () => {
+    let message = document.querySelector("#message-input").value;
+
+    const send_message = {
+      sender: user.account_id,
+      receiver: receiver,
+      content: message,
+      chat_id: chatId,
+    };
+
+    websocketinstance.newChatMessage(send_message);
+    websocketinstance.fetchMessages(user.user_id, chatId);
+
+    setFetching(true);
+
+    // Clear the input field
+    document.querySelector("#message-input").value = "";
+  };
+
+  const addMessage = (message) => {
+    // console.log("Messages updated");
+    setMessages(...messages, message);
+  };
+
+  const setSocketMessages = (messages) => {
+    // console.log("Setting messages");
+    setMessages(messages);
+  };
+
+  const waitForConnection = () => {
+    websocketinstance.addCallBacks(setSocketMessages, addMessage);
+  };
+
+  const waitForSocketConnection = () => {
+    if (socketConnection) {
+      setTimeout(() => {
+        if (websocketinstance.state() === 1) {
+          // console.log("Connection secure");
+          waitForConnection();
+        } else {
+          console.log("Waiting for connection");
+        }
+      }, 100);
+    }
+  };
+
+  useEffect(() => {
+    waitForSocketConnection();
+    setTimeout(() => {
+      if (socketConnection) {
+        websocketinstance.fetchMessages(user.user_id, chatId);
+      }
+    }, 300);
+  });
+
+  const chats_to_display = messages.map((message, index) => {
+    if (message.contact === user.username) {
+      return (
+        <Box key={index} className="message outgoing-message">
+          <Typography className="text">
+            {message.content} <span>{message.sent.slice(0, 5)}</span>
+          </Typography>
+        </Box>
+      );
+    } else {
+      return (
+        <Box key={index} className="message incoming-message">
+          <Typography className="text">
+            {message.content} <span>{message.sent.slice(0, 5)}</span>
+          </Typography>
+        </Box>
+      );
+    }
+  });
+
   return (
     <Container
       sx={{
         mt: "4rem",
-        // backgroundColor: "red",
         width: "100%",
         height: "90vh",
       }}
     >
-      <Box className="message-box">
-        <Box className="message incoming-message">
-          <Typography className="text">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi,
-            rem autem? Magni deserunt eum inventore blanditiis id, accusantium,
-            at asperiores voluptas omnis non modi voluptatem veritatis totam
-            adipisci quaerat natus? Possimus voluptate nisi eius aliquid,
-            ratione, beatae, distinctio quos animi modi suscipit perspiciatis
-            excepturi voluptatibus. Eius eum tempore minus aperiam quasi nostrum
-            ullam, nihil modi vel impedit cupiditate rem odit?
-          </Typography>
-        </Box>
-
-        <Box className="message outgoing-message">
-          <Typography className="text">Ipsum.</Typography>
-        </Box>
-
-        <Box className="message incoming-message">
-          <Typography className="text">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi,
-            rem autem? Magni deserunt eum inventore blanditiis id, accusantium,
-            at asperiores voluptas omnis non modi voluptatem veritatis totam
-            adipisci quaerat natus? Possimus voluptate nisi eius aliquid,
-            ratione, beatae, distinctio quos animi modi suscipit perspiciatis
-            excepturi voluptatibus. Eius eum tempore minus aperiam quasi nostrum
-            ullam, nihil modi vel impedit cupiditate rem odit?
-          </Typography>
-        </Box>
-
-        <Box className="message outgoing-message">
-          <Typography className="text">Ipsum.</Typography>
-        </Box>
-        <Box className="message outgoing-message">
-          <Typography className="text">Ipsum.</Typography>
-        </Box>
-
-        <Box className="message incoming-message">
-          <Typography className="text">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi,
-            rem autem? Magni deserunt eum inventore blanditiis id, accusantium,
-            at asperiores voluptas omnis non modi voluptatem veritatis totam
-            adipisci quaerat natus? Possimus voluptate nisi eius aliquid,
-            ratione, beatae, distinctio quos animi modi suscipit perspiciatis
-            excepturi voluptatibus. Eius eum tempore minus aperiam quasi nostrum
-            ullam, nihil modi vel impedit cupiditate rem odit?
-          </Typography>
-        </Box>
-      </Box>
+      <Box className="message-box">{chats_to_display}</Box>
 
       <Box className="message-input-box">
         <TextField
+          id="message-input"
           className="message-input"
           type="text"
           placeholder="Enter Message"
           size="small"
         />
-        <IconButton aria-label="send" aria-hidden={false}>
+        <IconButton
+          aria-label="send"
+          aria-hidden={false}
+          onClick={send_data_to_server}
+        >
           <SendIcon className="icon" sx={{ color: "#fff" }} />
         </IconButton>
       </Box>

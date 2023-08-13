@@ -1,0 +1,37 @@
+$spacecounts: (1, 2, 3, 4, 5);
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+// Function
+@function set-text-color($bg-color) {
+  @if (lightness($bg-color) > 70) {
+    @return #333;
+  } @else {
+    @return #fff;
+  }
+}
+
+// Mixin
+@mixin set-background($bg-color) {
+  background-color: $bg-color;
+  color: set-text-color($bg-color);
+}
+
+// For loop
+@each $space in $spacecounts {
+  .m-#{$space} {
+    margin: #{$space}rem;
+  }
+
+  .my-#{$space} {
+    margin: #{$space}rem 0;
+  }
+
+  .mx-#{$space} {
+    margin: 0 #{$space}rem;
+  }
+}

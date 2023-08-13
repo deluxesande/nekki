@@ -15,7 +15,7 @@ import UserAvatar from "../utils/UserAvatar";
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import AuthContext from "../../context/AuthContext";
-import useFetch from "../utils/useFetch";
+import { api_url } from "../../App";
 
 const NavIcon = ({ icon, color, badgeContent }) => {
   return (
@@ -29,7 +29,6 @@ const NavIcon = ({ icon, color, badgeContent }) => {
 
 const AppTopBar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const api = useFetch();
 
   const open = Boolean(anchorEl);
 
@@ -43,7 +42,14 @@ const AppTopBar = () => {
 
   const theme = useTheme();
 
-  let { user, logoutUser } = useContext(AuthContext);
+  const { user, logoutUser } = useContext(AuthContext);
+
+  let profile_pic = "";
+
+  if (user !== null) {
+    profile_pic = `${api_url}${user.profile_pic}`;
+  }
+  // console.log(profile_pic);
 
   return (
     <AppBar
@@ -96,8 +102,12 @@ const AppTopBar = () => {
           aria-haspopup="true"
           aria-expanded={open ? "true" : undefined}
         >
-          <UserAvatar image="/profile.jpeg" />
-          {user && <Typography>{user.username}</Typography>}
+          <UserAvatar image={profile_pic} />
+          {user && (
+            <Link to="/profile">
+              <Typography>{user.username}</Typography>
+            </Link>
+          )}
         </Box>
 
         <Menu

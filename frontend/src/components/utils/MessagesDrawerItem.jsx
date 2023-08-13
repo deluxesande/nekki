@@ -1,10 +1,30 @@
-import { Badge, ListItemButton, Stack, Typography } from "@mui/material";
-import React from "react";
+import { ListItemButton, Stack, Typography } from "@mui/material";
+import { useContext, useEffect, useState } from "react";
 import UserAvatar from "./UserAvatar";
+import { api_url } from "../../App";
+import AuthContext from "../../context/AuthContext";
 
-const MessagesDrawerItem = ({ user }) => {
+const MessagesDrawerItem = ({ chat, connect, setReceiver }) => {
+  const { user } = useContext(AuthContext);
+
+  let chat_profile = "";
+  if (chat.participants[0] === user.username) {
+    chat_profile = chat.profiles[1]["url"];
+  } else {
+    chat_profile = chat.profiles[0]["url"];
+  }
+
+  useEffect(() => {
+    if (chat.participants[0] === user.username) {
+      setReceiver(chat.profiles[1]["id"]);
+    } else {
+      setReceiver(chat.profiles[0]["id"]);
+    }
+  });
+
   return (
     <ListItemButton
+      onClick={connect}
       sx={{
         paddingTop: "20px",
         width: 270,
@@ -13,10 +33,17 @@ const MessagesDrawerItem = ({ user }) => {
       }}
     >
       {/* Add logic to check if user is online */}
-      <UserAvatar image="profile.jpeg" variant="standard" />
+      <UserAvatar image={`${api_url}${chat_profile}/`} variant="standard" />
       <Stack sx={{ flexGrow: 1, ml: "10px" }}>
-        <Typography>{user.name}</Typography>
-        <Typography variant="caption">{user.text}</Typography>
+        {/* Checking if the is another participant in the chat and display that participant */}
+        {chat.participants[0] === user.username ? (
+          <Typography>{chat.participants[1]}</Typography>
+        ) : (
+          <Typography>{chat.participants[0]}</Typography>
+        )}
+        <Typography variant="caption">
+          {chat.messages.slice(0, 25)}...
+        </Typography>
       </Stack>
       <Stack
         sx={{
@@ -27,10 +54,12 @@ const MessagesDrawerItem = ({ user }) => {
           gap: 1,
         }}
       >
-        <Badge badgeContent={user.messages} variant="dot" color="success" />
-        <Typography variant="caption" sx={{ color: "green" }}>
-          12:35
-        </Typography>
+        {/* {chat.seen ? null : (
+          <Badge badgeContent={chat.seen} variant="dot" color="success" />
+        )}
+        <Typography variant="caption" sx={{ color: chatColor }}>
+          {chat.sent}
+        </Typography> */}
       </Stack>
     </ListItemButton>
   );

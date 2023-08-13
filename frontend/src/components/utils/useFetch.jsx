@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import { useContext } from "react";
 import AuthContext from "../../context/AuthContext";
 import { api_url } from "../../App";
+import Cookies from "js-cookie";
 
 const useFetch = () => {
   const { authTokens, refreshToken, setAuthTokens, setUser } =
@@ -36,7 +37,8 @@ const useFetch = () => {
       console.log("New tokens set");
       setAuthTokens(data);
       setUser(jwt_decode(data.access));
-      localStorage.setItem("authTokens", JSON.stringify(data));
+      Cookies.set("authTokens", JSON.stringify(data));
+      // localStorage.setItem("authTokens", JSON.stringify(data));
     } else {
       alert("Error getting tokens.");
     }
@@ -51,11 +53,14 @@ const useFetch = () => {
 
     if (isExpired) await refreshAccessToken();
 
+    // console.log(Cookies.get("authTokens"));
+
     // Using authtokens from storage because state authTokens take time to update
     config["method"] = method;
     config["headers"] = {
       Authorization: `Bearer ${
-        JSON.parse(localStorage.getItem("authTokens")).access
+        JSON.parse(Cookies.get("authTokens"))?.access
+        // JSON.parse(localStorage.getItem("authTokens"))?.access
       }`,
     };
 

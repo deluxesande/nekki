@@ -1,14 +1,12 @@
-
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from django.contrib.auth import logout
 
 from .forms import Signin
-from.serializers import MyTokenObtainPairSerializer
-
+from .serializers import MyTokenObtainPairSerializer
 
 
 class MyTokenObtainPairView(TokenObtainPairView):
@@ -16,8 +14,9 @@ class MyTokenObtainPairView(TokenObtainPairView):
 
 
 @api_view(["POST"])
+@permission_classes([])  # Override default permission classes for this view only
 def register_user(request):
-    form = Signin(request.POST)
+    form = Signin(request.data)
 
     if form.is_valid():
         form.save()

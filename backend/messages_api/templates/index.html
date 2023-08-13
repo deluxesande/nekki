@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <textarea id="chat-text" spellcheck="false" cols="80" rows="30"></textarea>
+
+    <form>
+      <input id="input" type="text" size="80" />
+      <input id="submit" type="button" value="send" />
+    </form>
+
+    {{ room_name|json_script:"room-name" }}
+    <!-- <br /> -->
+    {{ user|json_script:"user" }}
+    <script type="text/javascript">
+      const roomName = JSON.parse(
+        document.getElementById("room-name").textContent
+      );
+
+      const user = JSON.parse(document.getElementById("user").textContent);
+
+      document.querySelector("#submit").onclick = () => {
+        const messageInputDOm = document.querySelector("#input");
+        const message = messageInputDOm.value;
+
+        chatSocket.send(
+          JSON.stringify({
+            content: message,
+            command: "new_message",
+            sender: user,
+          })
+        );
+
+        messageInputDOm.value = "";
+      };
+
+      const url = `ws://${window.location.host}/ws/chat/${roomName}/`;
+      const chatSocket = new WebSocket(url);
+
+      chatSocket.onopen = () => {
+        chatSocket.send(
+          JSON.stringify({ command: "fetch_messages", sender: user })
+        );
+      };
+
+      chatSocket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+
+        document.querySelector("#chat-text").value +=
+          data.sender + " " + data.content + "\n";
+      };
+    </script>
+  </body>
+</html>

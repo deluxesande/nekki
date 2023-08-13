@@ -2,20 +2,31 @@ import { createContext, useEffect, useState } from "react";
 import { api_url } from "../App";
 
 import jwt_decode from "jwt-decode";
+import dayjs from "dayjs";
 import { Box, CircularProgress } from "@mui/material";
+
+import Cookies from "js-cookie";
 
 const AuthContext = createContext();
 
 export default AuthContext;
 
 export const AuthProvider = ({ children }) => {
-  const authState = localStorage.getItem("authTokens")
-    ? JSON.parse(localStorage.getItem("authTokens"))
+  const authState = Cookies.get("authTokens")
+    ? JSON.parse(Cookies.get("authTokens"))
     : null;
 
-  const userState = localStorage.getItem("authTokens")
-    ? JSON.parse(localStorage.getItem("authTokens")) // jwt_decode(localStorage.getItem("authTokens"))
+  const userState = Cookies.get("authTokens")
+    ? jwt_decode(Cookies.get("authTokens"))
     : null;
+
+  // const authState = localStorage.getItem("authTokens")
+  //   ? JSON.parse(localStorage.getItem("authTokens"))
+  //   : null;
+
+  // const userState = localStorage.getItem("authTokens")
+  //   ? jwt_decode(localStorage.getItem("authTokens"))
+  //   : null;
 
   const [user, setUser] = useState(() => userState);
   const [authTokens, setAuthTokens] = useState(() => authState);
@@ -42,8 +53,16 @@ export const AuthProvider = ({ children }) => {
     if (response.status === 200) {
       setAuthTokens(data);
       setUser(jwt_decode(data.access));
-      localStorage.setItem("authTokens", JSON.stringify(data));
-      localStorage.setItem("refreshToken", data.refresh);
+      Cookies.set("authTokens", JSON.stringify(data), {
+        secure: true,
+        sameSite: "Strict",
+      });
+      Cookies.set("refreshToken", data.refresh, {
+        secure: true,
+        sameSite: "Strict",
+      });
+      // localStorage.setItem("authTokens", JSON.stringify(data));
+      // localStorage.setItem("refreshToken", data.refresh);
     } else {
       alert("Error getting tokens.");
     }
@@ -59,15 +78,17 @@ export const AuthProvider = ({ children }) => {
       },
     };
     const response = await fetch(`${api_url}/auth/logout/`, access_config);
-    console.log(response);
+    // console.log(response);
   };
   const logoutUser = () => {
     // console.log("Log out called");
 
     setAuthTokens(null);
     setUser(null);
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("authTokens");
+    Cookies.remove("refreshToken");
+    Cookies.remove("authTokens");
+    // localStorage.removeItem("refreshToken");
+    // localStorage.removeItem("authTokens");
     logout_from_the_backend();
   };
 
@@ -75,7 +96,8 @@ export const AuthProvider = ({ children }) => {
   const contextData = {
     user: user,
     authTokens: authTokens,
-    refreshToken: localStorage.getItem("refreshToken"),
+    // Remember when changing
+    refreshToken: Cookies.get("refreshToken"),
     fetching: fetching,
     setFetching: setFetching,
     setAuthTokens: setAuthTokens,
@@ -87,7 +109,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (authTokens) setUser(jwt_decode(authTokens.access));
 
-    setTimeout(() => setLoading(false), 2000);
+    setLoading(false);
   }, [authTokens, loading]);
 
   return (
