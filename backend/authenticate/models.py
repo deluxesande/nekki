@@ -21,3 +21,7 @@ class Account(models.Model):
 
     def __str__(self):
         return str(self.user)
+
+    # Changing the size of the profile photo
+    def save(*args, **kwargs):
+        super().save(*args, **kwargs)
