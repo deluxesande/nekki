@@ -1,4 +1,4 @@
-import { Drawer, List } from "@mui/material";
+import { Button, Drawer, List } from "@mui/material";
 import MessagesDrawerItem from "../utils/MessagesDrawerItem";
 import { useContext, useEffect, useState } from "react";
 import useFetch from "../utils/useFetch";
@@ -62,7 +62,28 @@ const MessagesDrawer = ({
     >
       <List sx={{ mt: "4rem" }}>
         {isValid && (
-          <p style={{ width: "240px", padding: "20px" }}>No Chats...</p>
+          <div
+            style={{
+              width: "240px",
+              padding: "20px",
+              paddingTop: "300px", // Make this dynamic
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+              pt: "4rem",
+            }}
+          >
+            <p
+              style={{
+                fontFamily: "monospace",
+              }}
+            >
+              No Chats...
+            </p>
+            <Button color="primary" variant="contained" sx={{ mt: "20px" }}>
+              Start chat
+            </Button>
+          </div>
         )}
         {chats.map((chat, index) => (
           <MessagesDrawerItem

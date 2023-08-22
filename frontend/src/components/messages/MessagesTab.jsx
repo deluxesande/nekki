@@ -11,9 +11,11 @@ import "../../css/MessagesTab.css";
 import { useContext, useEffect, useState } from "react";
 import AuthContext from "../../context/AuthContext";
 import websocketinstance from "../utils/Websocket";
+import { TramOutlined } from "@mui/icons-material";
 
 const MessagesTab = ({ socketConnection, setFetching, chatId, receiver }) => {
   const [messages, setMessages] = useState([]);
+  const [showInput, setShowInput] = useState(false);
   const { user } = useContext(AuthContext);
 
   const send_data_to_server = () => {
@@ -91,6 +93,10 @@ const MessagesTab = ({ socketConnection, setFetching, chatId, receiver }) => {
     }
   });
 
+  if (messages.length > 0 && !showInput) {
+    setShowInput(true);
+  }
+
   return (
     <Container
       sx={{
@@ -102,20 +108,37 @@ const MessagesTab = ({ socketConnection, setFetching, chatId, receiver }) => {
       <Box className="message-box">{chats_to_display}</Box>
 
       <Box className="message-input-box">
-        <TextField
-          id="message-input"
-          className="message-input"
-          type="text"
-          placeholder="Enter Message"
-          size="small"
-        />
-        <IconButton
-          aria-label="send"
-          aria-hidden={false}
-          onClick={send_data_to_server}
-        >
-          <SendIcon className="icon" sx={{ color: "#fff" }} />
-        </IconButton>
+        {showInput ? (
+          <>
+            <TextField
+              id="message-input"
+              className="message-input"
+              type="text"
+              placeholder="Enter Message"
+              size="small"
+            />
+            <IconButton
+              aria-label="send"
+              aria-hidden={false}
+              onClick={send_data_to_server}
+            >
+              <SendIcon className="icon" sx={{ color: "#fff" }} />
+            </IconButton>
+          </>
+        ) : (
+          <Typography
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50deg, -50deg)",
+              fontFamily: "monospace",
+            }}
+            variant="h4"
+          >
+            Start chats...
+          </Typography>
+        )}
       </Box>
     </Container>
   );
