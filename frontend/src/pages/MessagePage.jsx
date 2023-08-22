@@ -1,4 +1,4 @@
-import { Stack, Typography } from "@mui/material";
+import { Stack } from "@mui/material";
 import "../css/smallAvatar.css";
 import MessagesDrawer from "../components/messages/MessagesDrawer";
 import MessagesTab from "../components/messages/MessagesTab";
