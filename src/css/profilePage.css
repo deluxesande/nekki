@@ -1,0 +1,26 @@
+:root {
+  --main-padding: 20px;
+}
+
+.profile-card {
+  /* background: red; */
+
+  border-radius: 3px;
+  padding: var(--main-padding);
+  display: flex;
+  flex-direction: row;
+  gap: 2;
+}
+
+.profile-card .profile-image {
+  width: 160px !important;
+  height: 160px !important;
+}
+
+.post-container {
+  /* background-color: cyan; */
+
+  margin-top: 20px;
+  border-radius: 3px;
+  padding: var(--main-padding);
+}

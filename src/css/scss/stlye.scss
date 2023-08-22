@@ -1,0 +1,24 @@
+// Configs imported at the bottom
+
+// Variables
+$text-primary: #f4f4f4;
+$primary-color: #0185b9;
+$secondary-color: #f7a205;
+
+.showcase {
+  max-width: 1000px;
+  margin: 0 auto;
+
+  // & - stands for the parent name (.showcase)
+  &-content {
+    width: 100%;
+    color: $text-primary;
+  }
+}
+
+.main {
+  @include set-background($primary-color);
+}
+
+@import "config";
+@import "buttons";

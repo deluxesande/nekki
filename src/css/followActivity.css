@@ -1,0 +1,12 @@
+.MuiTypography-subtitle2,
+.MuiTypography-body2 {
+  color: #fff !important;
+}
+
+.MuiTypography-subtitle2 {
+  font-size: 15px;
+}
+
+.MuiTypography-body2 {
+  font-size: 16px;
+}
