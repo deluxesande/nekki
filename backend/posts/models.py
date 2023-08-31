@@ -1,5 +1,5 @@
 from django.db import models
-
+from PIL import Image
 from authenticate.models import Account
 
 
@@ -32,3 +32,12 @@ class Post(models.Model):
 
     def __str__(self):
         return self.post_caption
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        img = Image.open(self.post_image.path)
+
+        if img.height > 600 and img.width > 600:
+            output_size = (300, 600)
+            img.thumbnail(output_size)
+            img.save(self.post_image.path)

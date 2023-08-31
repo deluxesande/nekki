@@ -1,0 +1,13 @@
+.users-overlay {
+    position: absolute;
+    min-width: 100vh;
+    min-height: 100vh;
+    background-color: #fefefe;
+    z-index: 3000;
+}
+
+.overlay-list {
+    min-width: 400px;
+    height: auto;
+    background-color: #f4f4f4;
+}
