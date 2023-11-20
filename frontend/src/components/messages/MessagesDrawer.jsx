@@ -1,15 +1,11 @@
-<<<<<<< HEAD
+/* eslint-disable react/prop-types */
+
 import {
-    Box,
     Button,
     Drawer,
     List,
     TextField,
-    Typography,
 } from "@mui/material";
-=======
-import { Button, Drawer, List } from "@mui/material";
->>>>>>> 1e18610d1bd4ddd666d45296b3ebeb5270848245
 import MessagesDrawerItem from "../utils/MessagesDrawerItem";
 import { useContext, useEffect, useState } from "react";
 import useFetch from "../utils/useFetch";
@@ -42,9 +38,9 @@ const MessagesDrawer = ({
         setFetching(false);
     };
 
-    const start_new_chat = async () => {
-        const { response, data } = api(`get-contact/${receiver}`, "GET");
-    };
+    // const start_new_chat = async () => {
+    //     const { response, data } = api(`get-contact/${receiver}`, "GET");
+    // };
 
     useEffect(() => {
         get_user_cahts();
@@ -75,7 +71,6 @@ const MessagesDrawer = ({
         );
     });
 
-<<<<<<< HEAD
     return (
         <>
             <Drawer
@@ -117,7 +112,7 @@ const MessagesDrawer = ({
                                 color="primary"
                                 variant="contained"
                                 sx={{ mt: "20px" }}
-                                onclick={start_new_chat}
+                                // onclick={start_new_chat}
                             >
                                 Start chat
                             </Button>
@@ -129,57 +124,6 @@ const MessagesDrawer = ({
             </Drawer>
         </>
     );
-=======
-  if (chats.length === 0) {
-    isValid = true;
-  }
-
-  return (
-    <Drawer
-      open
-      variant="permanent"
-      sx={{
-        width: drawerWidth,
-        overflowY: "auto",
-      }}
-    >
-      <List sx={{ mt: "4rem" }}>
-        {isValid && (
-          <div
-            style={{
-              width: "240px",
-              padding: "20px",
-              paddingTop: "300px", // Make this dynamic
-              display: "flex",
-              flexDirection: "column",
-              gap: 2,
-              pt: "4rem",
-            }}
-          >
-            <p
-              style={{
-                fontFamily: "monospace",
-              }}
-            >
-              No Chats...
-            </p>
-            <Button color="primary" variant="contained" sx={{ mt: "20px" }}>
-              Start chat
-            </Button>
-          </div>
-        )}
-        {chats.map((chat, index) => (
-          <MessagesDrawerItem
-            connect={() => connect_to_websocket(chat.id)}
-            chat={chat}
-            key={index}
-            setReceiver={setReceiver}
-          />
-        ))}
-      </List>
-    </Drawer>
-  );
->>>>>>> 1e18610d1bd4ddd666d45296b3ebeb5270848245
 };
 
 export default MessagesDrawer;

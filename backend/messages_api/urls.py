@@ -9,5 +9,5 @@ urlpatterns = [
     path("delete-chat/<int:pk>/", views.DeleteChat.as_view(), name="delete-chat"),
     path("create/", views.CreateChat.as_view(), name="create-chat"),
     path("<str:room_name>/", views.chats, name="view-chats"),
-    path("get-contact/<str:name>/", views.GetUser, name="get-contact"),
+    path("get-contact/<str:name>/", views.GetUser.as_view(), name="get-contact"),
 ]
